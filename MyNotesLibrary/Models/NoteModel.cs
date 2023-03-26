@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MyNotesUI.Models
+namespace MyNotesLibrary.Models
 {
     public class NoteModel
     {
-        public int Id { get; set; }
+        public int Id { get; set; } = 0;
         public string Title { get; set; }
         public string Note { get; set; }
         public DateTime CreatedDate { get; set; }

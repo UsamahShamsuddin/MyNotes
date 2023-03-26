@@ -16,31 +16,39 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <DockPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
+        <DockPanel Grid.Row="0" Grid.ColumnSpan="2">
             <Menu DockPanel.Dock="Top">
-                <MenuItem Header="_Note">
-                    <MenuItem x:Name="Load" Header="_Load"/>
-                    <MenuItem x:Name="Save" Header="_Save"/>
-                    <MenuItem x:Name="Clear" Header="_Clear"/>
-                    <MenuItem x:Name="Delete" Header="_Delete"/>
+                <MenuItem Header="_Note" FontWeight="Bold">
+                    <MenuItem x:Name="Load" Header="_Load" FontWeight="Medium"/>
+                    <MenuItem x:Name="Save" Header="_Save" FontWeight="Medium"/>
+                    <MenuItem x:Name="Clear" Header="_Clear" FontWeight="Medium"/>
+                    <MenuItem x:Name="Delete" Header="_Delete" FontWeight="Medium"/>
+                </MenuItem>
+                <MenuItem Header="_Database" FontWeight="Bold">
                 </MenuItem>
             </Menu>
         </DockPanel>
 
         <StackPanel Grid.Row="1" Grid.Column="0">
-            <StackPanel Orientation="Horizontal">
+            <StackPanel Orientation="Horizontal" Margin="5 10 0 0">
                 <TextBlock Text="Id:"/>
-                <TextBox x:Name="IdText" Text="{Binding Path=Id, UpdateSourceTrigger=PropertyChanged}" Width="50" HorizontalAlignment="Left"/>
+                <TextBox x:Name="IdText" Text="{Binding Path=Id, UpdateSourceTrigger=PropertyChanged}" Width="50" HorizontalAlignment="Left"
+                         Margin="5 0 0 0"/>
             </StackPanel>
 
-            <TextBlock Text="Title:"/>
-            <TextBox x:Name="TitleText" Text="{Binding Path=Title, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap"/>
+            <TextBlock Text="Title:" Margin="5 10 0 0"/>
+            <TextBox x:Name="TitleText" Text="{Binding Path=Title, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" Margin="5 0 0 0"/>
 
-            <TextBlock Text="Note:"/>
-            <TextBox x:Name="NoteText" Text="{Binding Path=Note, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" AcceptsReturn="True" AcceptsTab="True" SpellCheck.IsEnabled="True"/>
+            <TextBlock Text="Note:" Margin="5 10 0 0"/>
+            <TextBox x:Name="NoteText" Text="{Binding Path=Note, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" AcceptsReturn="True" AcceptsTab="True" SpellCheck.IsEnabled="True"
+                     Margin="5 0 0 0"/>
+
+            <Button x:Name="SaveToDB" Content="Save to DB"/>
+            <Button x:Name="LoadDB" Content="Load from DB"/>
         </StackPanel>
 
-        <DataGrid ItemsSource="{Binding Path=Notes}" AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True" Grid.Row="1" Grid.Column="1">
+        <DataGrid ItemsSource="{Binding Path=Notes}" AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True" Grid.Row="1" Grid.Column="1"
+                  Margin="5 10 0 0">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Id" Binding="{Binding Path=Id}"/>
                 <DataGridTextColumn Header="Title" Binding="{Binding Path=Title}" Width="auto"/>

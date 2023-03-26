@@ -1,10 +1,13 @@
 ﻿using Caliburn.Micro;
-using MyNotesUI.Models;
+using Microsoft.Extensions.Configuration;
+using MyNotesLibrary;
+using MyNotesLibrary.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,6 +17,7 @@ namespace MyNotesUI.ViewModels
 {
     public class ShellViewModel : Screen
     {
+        SqliteCrud sql = new SqliteCrud(GetConnectionString());
         private ObservableCollection<NoteModel> _notes = new ObservableCollection<NoteModel>();
         private int _id;
         private string _title;
@@ -30,7 +34,6 @@ namespace MyNotesUI.ViewModels
             get { return _id; }
             set { _id = value; NotifyOfPropertyChange(() => Id); }
         }
-
 
         public string Title
         {
@@ -78,5 +81,41 @@ namespace MyNotesUI.ViewModels
                 }
             }
         }
+
+        private static string GetConnectionString(string connectionStringName = "Default")
+        {
+            string output = "";
+
+            var builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json");
+
+            var config = builder.Build();
+
+            output = config.GetConnectionString(connectionStringName);
+
+            return output;
+        }
+
+        public void SaveToDB()
+        {
+            NoteModel note = new NoteModel
+            {
+                Id = Id,
+                Title = Title,
+                Note = Note,
+            };
+
+            sql.CreateNote(note);
+        }
+
+        public void LoadDB()
+        {
+            var rows = sql.ReadNotes();
+            foreach (var row in rows)
+            {
+                Notes.Add(row);
+            }
+        }
+
+
     }
 }
