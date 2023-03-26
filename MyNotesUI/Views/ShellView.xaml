@@ -8,7 +8,7 @@
         Title="MyNotes" Height="450" Width="800" WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="300"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
@@ -19,7 +19,7 @@
         <DockPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
             <Menu DockPanel.Dock="Top">
                 <MenuItem Header="_Note">
-                    <MenuItem x:Name="New" Header="_New"/>
+                    <MenuItem x:Name="Load" Header="_Load"/>
                     <MenuItem x:Name="Save" Header="_Save"/>
                     <MenuItem x:Name="Clear" Header="_Clear"/>
                     <MenuItem x:Name="Delete" Header="_Delete"/>
@@ -28,13 +28,31 @@
         </DockPanel>
 
         <StackPanel Grid.Row="1" Grid.Column="0">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Id:"/>
+                <TextBox x:Name="IdText" Text="{Binding Path=Id, UpdateSourceTrigger=PropertyChanged}" Width="50" HorizontalAlignment="Left"/>
+            </StackPanel>
+
             <TextBlock Text="Title:"/>
-            <TextBox x:Name="TitleText" TextWrapping="Wrap" AcceptsReturn="True" AcceptsTab="True" SpellCheck.IsEnabled="True"/>
+            <TextBox x:Name="TitleText" Text="{Binding Path=Title, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap"/>
 
             <TextBlock Text="Note:"/>
-            <TextBox x:Name="NoteText" TextWrapping="Wrap" AcceptsReturn="True" AcceptsTab="True" SpellCheck.IsEnabled="True"/>
+            <TextBox x:Name="NoteText" Text="{Binding Path=Note, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" AcceptsReturn="True" AcceptsTab="True" SpellCheck.IsEnabled="True"/>
         </StackPanel>
 
-        <DataGrid x:Name="PreviousNotes" Grid.Row="1" Grid.Column="1"/>
+        <DataGrid ItemsSource="{Binding Path=Notes}" AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True" Grid.Row="1" Grid.Column="1">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Id" Binding="{Binding Path=Id}"/>
+                <DataGridTextColumn Header="Title" Binding="{Binding Path=Title}" Width="auto"/>
+                <DataGridTextColumn Header="Note" Binding="{Binding Path=Note}" Width="*"/>
+                <DataGridTemplateColumn Header="Date" Width="80">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Path=CreatedDate, StringFormat=d}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
     </Grid>
 </Window>
