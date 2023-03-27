@@ -11,6 +11,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 
 namespace MyNotesUI.ViewModels
@@ -19,9 +20,14 @@ namespace MyNotesUI.ViewModels
     {
         SqliteCrud sql = new SqliteCrud(GetConnectionString());
         private ObservableCollection<NoteModel> _notes = new ObservableCollection<NoteModel>();
-        private int _id;
+        private string _id;
         private string _title;
         private string _note;
+
+        public ShellViewModel()
+        {
+            LoadFromDB();
+        }
 
         public ObservableCollection<NoteModel> Notes
         {
@@ -29,25 +35,83 @@ namespace MyNotesUI.ViewModels
             set { _notes = value; }
         }
 
-        public int Id
+        public string Id
         {
             get { return _id; }
-            set { _id = value; NotifyOfPropertyChange(() => Id); }
+            set
+            {
+                _id = value;
+                NotifyOfPropertyChange(() => Id);
+                NotifyOfPropertyChange(() => CanClear);
+                NotifyOfPropertyChange(() => CanSave);
+                NotifyOfPropertyChange(() => CanUpdateById);
+                NotifyOfPropertyChange(() => CanLoadById);
+                NotifyOfPropertyChange(() => CanDeleteById);
+            }
         }
 
         public string Title
         {
             get { return _title; }
-            set { _title = value; NotifyOfPropertyChange(() => Title); }
+            set
+            {
+                _title = value;
+                NotifyOfPropertyChange(() => Title);
+                NotifyOfPropertyChange(() => CanClear);
+                NotifyOfPropertyChange(() => CanSave);
+                NotifyOfPropertyChange(() => CanUpdateById);
+            }
         }
 
         public string Note
         {
             get { return _note; }
-            set { _note = value; NotifyOfPropertyChange(() => Note); }
+            set
+            {
+                _note = value;
+                NotifyOfPropertyChange(() => Note);
+                NotifyOfPropertyChange(() => CanClear);
+                NotifyOfPropertyChange(() => CanSave);
+                NotifyOfPropertyChange(() => CanUpdateById);
+            }
         }
 
-        public void Load()
+        private DateTime _createdDate;
+
+        public DateTime CreatedDate
+        {
+            get { return _createdDate; }
+            set { _createdDate = value; }
+        }
+
+
+        public void LoadFromDB()
+        {
+            Notes.Clear();
+
+            var rows = sql.ReadNotes();
+            foreach (var row in rows)
+            {
+                Notes.Add(row);
+            }
+        }
+
+        public bool CanLoadById
+        {
+            get
+            {
+                if (String.IsNullOrWhiteSpace(Id))
+                {
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+        }
+
+        public void LoadById()
         {
             foreach (var note in Notes)
             {
@@ -59,27 +123,137 @@ namespace MyNotesUI.ViewModels
             }
         }
 
-        public void Save()
+        public bool CanClear
         {
-            Notes.Add(new NoteModel { Id = Id, Title = Title, Note = Note, CreatedDate = DateTime.Now });
-            Id++;
+            get
+            {
+                if (String.IsNullOrWhiteSpace(Id) && String.IsNullOrWhiteSpace(Title) && String.IsNullOrWhiteSpace(Note))
+                {
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            }
         }
 
         public void Clear()
         {
+            Id = "";
             Title = "";
             Note = "";
         }
 
-        public void Delete()
+        public bool CanSave
         {
-            for (int i = 0; i < Notes.Count; i++)
+            get
             {
-                if (Id == Notes[i].Id)
+                int idCount = 0;
+                for (int i = 0; i < Notes.Count; i++)
                 {
-                    Notes.Remove(Notes[i]);
+                    if (Id == Notes[i].Id)
+                    {
+                        idCount++;
+                    }
+                }
+
+                if (String.IsNullOrWhiteSpace(Id) || String.IsNullOrWhiteSpace(Title) || String.IsNullOrWhiteSpace(Note) || idCount > 0)
+                {
+                    return false;
+                }
+                else
+                {
+                    return true;
                 }
             }
+        }
+
+        public void Save()
+        {
+            Notes.Add(new NoteModel { Id = Id, Title = Title, Note = Note, CreatedDate = DateTime.Now });
+
+            NoteModel note = new NoteModel
+            {
+                Id = Id,
+                Title = Title,
+                Note = Note,
+                CreatedDate = DateTime.Now,
+            };
+
+            sql.CreateNote(note);
+        }
+
+        public bool CanUpdateById
+        {
+            get
+            {
+                if (String.IsNullOrWhiteSpace(Id) || String.IsNullOrWhiteSpace(Title) || String.IsNullOrWhiteSpace(Note))
+                {
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+        }
+
+        public void UpdateById()
+        {
+            NoteModel newNote = new();
+
+            foreach (var note in Notes)
+            {
+                if (Id == note.Id)
+                {
+                    newNote.Id = Id;
+                    newNote.Title = Title;
+                    newNote.Note = Note;
+                    newNote.CreatedDate = DateTime.Now;
+                }
+            }
+
+            sql.UpdateNote(newNote);
+
+            LoadFromDB();
+        }
+
+        public bool CanDeleteById
+        {
+            get
+            {
+                int idCount = 0;
+                for (int i = 0; i < Notes.Count; i++)
+                {
+                    if (Id == Notes[i].Id)
+                    {
+                        idCount++;
+                    }
+                }
+
+                if (String.IsNullOrWhiteSpace(Id) || idCount < 1)
+                {
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+        }
+
+        public void DeleteById()
+        {
+            foreach (var note in Notes)
+            {
+                if (Id == note.Id)
+                {
+                    sql.DeleteNote(note);
+                }
+            }
+
+            LoadFromDB();
         }
 
         private static string GetConnectionString(string connectionStringName = "Default")
@@ -94,28 +268,5 @@ namespace MyNotesUI.ViewModels
 
             return output;
         }
-
-        public void SaveToDB()
-        {
-            NoteModel note = new NoteModel
-            {
-                Id = Id,
-                Title = Title,
-                Note = Note,
-            };
-
-            sql.CreateNote(note);
-        }
-
-        public void LoadDB()
-        {
-            var rows = sql.ReadNotes();
-            foreach (var row in rows)
-            {
-                Notes.Add(row);
-            }
-        }
-
-
     }
 }

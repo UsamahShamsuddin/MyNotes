@@ -8,7 +8,7 @@ namespace MyNotesLibrary.Models
 {
     public class NoteModel
     {
-        public int Id { get; set; } = 0;
+        public string Id { get; set; }
         public string Title { get; set; }
         public string Note { get; set; }
         public DateTime CreatedDate { get; set; }

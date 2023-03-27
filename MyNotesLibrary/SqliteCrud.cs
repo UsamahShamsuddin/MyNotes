@@ -20,14 +20,26 @@ namespace MyNotesLibrary
 
         public void CreateNote(NoteModel note)
         {
-            string sql = "insert into Notes (Id, Title, Note) values (@Id, @Title, @Note);";
-            db.SaveData(sql, new { note.Id, note.Title, note.Note }, _connectionString);
+            string sql = "insert into Notes (Id, Title, Note, CreatedDate) values (@Id, @Title, @Note, @CreatedDate);";
+            db.SaveData(sql, new { note.Id, note.Title, note.Note, note.CreatedDate }, _connectionString);
         }
 
         public List<NoteModel> ReadNotes()
         {
-            string sql = "select Id, Title, Note from Notes;";
+            string sql = "select Id, Title, Note, CreatedDate from Notes;";
             return db.LoadData<NoteModel, dynamic>(sql, new { }, _connectionString);
+        }
+
+        public void UpdateNote(NoteModel note)
+        {
+            string sql = "update Notes set Title = @Title, Note = @Note, CreatedDate=@CreatedDate where Id = @Id;";
+            db.SaveData(sql, note, _connectionString);
+        }
+
+        public void DeleteNote(NoteModel note)
+        {
+            string sql = "delete from Notes where Id = @Id;";
+            db.SaveData(sql, new { note.Id }, _connectionString);
         }
     }
 }
