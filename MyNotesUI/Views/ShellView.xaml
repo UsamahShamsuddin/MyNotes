@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MyNotesUI.Views"
         mc:Ignorable="d"
-        Title="MyNotes" Height="450" Width="800" WindowStartupLocation="CenterScreen">
+        Title="MyNotes" Height="500" Width="800" WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="300"/>
@@ -40,7 +40,7 @@
             <TextBox x:Name="TitleText" Text="{Binding Path=Title, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" Margin="5 0 0 0"/>
 
             <TextBlock Text="Note:" Margin="5 10 0 0"/>
-            <TextBox x:Name="NoteText" Text="{Binding Path=Note, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" AcceptsReturn="True" AcceptsTab="True" SpellCheck.IsEnabled="True"
+            <TextBox x:Name="NoteText" Text="{Binding Path=Note, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" AcceptsReturn="True" AcceptsTab="True"
                      Margin="5 0 0 0"/>
         </StackPanel>
 
