@@ -17,7 +17,7 @@
         </Grid.RowDefinitions>
 
         <DockPanel Grid.Row="0" Grid.ColumnSpan="2">
-            <Menu DockPanel.Dock="Top">
+            <Menu>
                 <MenuItem Header="_Note" FontWeight="Bold">
                     <MenuItem x:Name="LoadFromDB" Header="_Load from Database" FontWeight="Medium"/>
                     <MenuItem x:Name="LoadById" Header="Load by Id" FontWeight="Medium"/>
