@@ -53,7 +53,7 @@
                 <DataGridTemplateColumn Header="Date" Width="80">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding Path=CreatedDate, StringFormat=d}"/>
+                            <TextBlock Text="{Binding Path=CreatedDate, StringFormat=dd/MM/yyy}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
