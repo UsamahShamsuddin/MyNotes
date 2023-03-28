@@ -197,6 +197,19 @@ namespace MyNotesUI.ViewModels
         {
             get
             {
+                bool sameContent = false;
+                foreach (var note in Notes)
+                {
+                    if (Id == note.Id)
+                    {
+                        if (Title == note.Title && Note == note.Note)
+                        {
+                            sameContent = true;
+                        }
+                    }
+                }
+
+
                 int idCount = 0;
                 for (int i = 0; i < Notes.Count; i++)
                 {
@@ -206,7 +219,7 @@ namespace MyNotesUI.ViewModels
                     }
                 }
 
-                if (String.IsNullOrWhiteSpace(Id) || String.IsNullOrWhiteSpace(Title) || String.IsNullOrWhiteSpace(Note) || idCount < 1)
+                if (String.IsNullOrWhiteSpace(Id) || String.IsNullOrWhiteSpace(Title) || String.IsNullOrWhiteSpace(Note) || idCount < 1 || sameContent)
                 {
                     return false;
                 }
