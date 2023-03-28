@@ -19,7 +19,7 @@
         <DockPanel Grid.Row="0" Grid.ColumnSpan="2">
             <Menu>
                 <MenuItem Header="_Note" FontWeight="Bold">
-                    <MenuItem x:Name="LoadFromDB" Header="_Load from Database" FontWeight="Medium"/>
+                    <!--MenuItem x:Name="LoadFromDB" Header="_Load from Database" FontWeight="Medium"/-->
                     <MenuItem x:Name="LoadById" Header="Load by Id" FontWeight="Medium"/>
                     <MenuItem x:Name="Clear" Header="_Clear" FontWeight="Medium"/>
                     <MenuItem x:Name="Save" Header="_Save" FontWeight="Medium"/>

@@ -100,7 +100,16 @@ namespace MyNotesUI.ViewModels
         {
             get
             {
-                if (String.IsNullOrWhiteSpace(Id))
+                int idCount = 0;
+                for (int i = 0; i < Notes.Count; i++)
+                {
+                    if (Id == Notes[i].Id)
+                    {
+                        idCount++;
+                    }
+                }
+
+                if (String.IsNullOrWhiteSpace(Id) || idCount < 1)
                 {
                     return false;
                 }
@@ -188,7 +197,16 @@ namespace MyNotesUI.ViewModels
         {
             get
             {
-                if (String.IsNullOrWhiteSpace(Id) || String.IsNullOrWhiteSpace(Title) || String.IsNullOrWhiteSpace(Note))
+                int idCount = 0;
+                for (int i = 0; i < Notes.Count; i++)
+                {
+                    if (Id == Notes[i].Id)
+                    {
+                        idCount++;
+                    }
+                }
+
+                if (String.IsNullOrWhiteSpace(Id) || String.IsNullOrWhiteSpace(Title) || String.IsNullOrWhiteSpace(Note) || idCount < 1)
                 {
                     return false;
                 }
