@@ -191,6 +191,10 @@ namespace MyNotesUI.ViewModels
             };
 
             sql.CreateNote(note);
+
+            Id = "";
+            Title = "";
+            Note = "";
         }
 
         public bool CanUpdateById
@@ -285,6 +289,10 @@ namespace MyNotesUI.ViewModels
             }
 
             LoadFromDB();
+
+            Id = "";
+            Title = "";
+            Note = "";
         }
 
         private static string GetConnectionString(string connectionStringName = "Default")
